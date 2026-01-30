@@ -4,12 +4,24 @@
     SensorRange.java
  */
 
-
-
-
-
+import java.util.Arrays;
 
 public class SensorRange {
+
+    //! Remember to delete this temporary method
+    public static void main(String args[]){
+        int[] readings = {7, 1, 9, 2, 2, 10, 5};
+        int[][] queries = {
+            {2,5},
+            {1,7},
+            {5,10}
+        };
+
+        int[] results = rangeCountFast(readings, queries);
+
+        System.out.println(Arrays.toString(results));
+    }
+
     public static int[] rangeCountBF(int[] readings, int[][] queries){
         int numQueries = queries.length;
         int[] results = new int[numQueries];
@@ -21,18 +33,72 @@ public class SensorRange {
             int H = queries[i][1];
 
             for (int j = 0; j < readings.length; j++){
-                if (readings[j] < H && readings[j] > L){
+                if (readings[j] <= H && readings[j] >= L){
                     queryResult++;
                 }
             }
             results[queryResultsIndex] = queryResult;
             queryResultsIndex++;
+            queryResult = 0; // reset counter
         }
 
         return results;
     }
 
-    // public static int[] rangeCountFast(int[] readings, int[][] queries){
+    // Uses binary search to find L in O(logn)
+    static int findL(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length;
 
-    // }
+        while (left < right) {
+            int mid = (left + right) / 2;
+
+            if (arr[mid] < target) {
+                left = mid + 1;  
+            } else {
+                right = mid;
+            }
+        }
+
+        return left;
+    }
+
+
+    static int findH(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length;
+
+        while (left < right) {
+            int mid = (left + right) / 2;
+
+            if (arr[mid] <= target) {
+                left = mid + 1;  
+            } else {
+                right = mid;
+            }
+        }
+
+        return left;
+    }
+
+    public static int[] rangeCountFast(int[] readings, int[][] queries){
+        // Sort the readings in O(nlogn)
+        Arrays.sort(readings);
+
+        int[] results = new int[queries.length];
+        int arrIndex = 0;
+
+        for (int i = 0; i < queries.length; i++){
+            int L = findL(readings, queries[i][0]);
+            int H = findH(readings, queries[i][1]);
+            int result = H - L;
+            results[arrIndex++] = result;
+        }
+
+        return results;
+
+    }
+
+
+
 }
