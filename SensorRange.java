@@ -8,20 +8,6 @@ import java.util.Arrays;
 
 public class SensorRange {
 
-    //! Remember to delete this temporary method
-    public static void main(String args[]){
-        int[] readings = {7, 1, 9, 2, 2, 10, 5};
-        int[][] queries = {
-            {2,5},
-            {1,7},
-            {5,10}
-        };
-
-        int[] results = rangeCountFast(readings, queries);
-
-        System.out.println(Arrays.toString(results));
-    }
-
     public static int[] rangeCountBF(int[] readings, int[][] queries){
         int numQueries = queries.length;
         int[] results = new int[numQueries];
@@ -98,7 +84,6 @@ public class SensorRange {
         return results;
 
     }
-
 
 
 }
